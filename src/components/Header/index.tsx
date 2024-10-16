@@ -1,8 +1,13 @@
 import { Button } from 'antd';
 import { useComponetsStore } from '../../editor/stores/components';
+import { useEffect } from 'react';
 
 const Index = () => {
-  const { mode, setMode } = useComponetsStore();
+  const { mode, setMode, setCurComponentId } = useComponetsStore();
+
+  useEffect(() => {
+    setCurComponentId(null);
+  }, [mode]);
   return (
     <div>
       <Button

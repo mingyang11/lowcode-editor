@@ -101,6 +101,8 @@ function SelectedMask(props: SelectedMaskProps) {
     };
   }, []);
 
+  console.log(el, 'el');
+
   return createPortal(
     <>
       <div
