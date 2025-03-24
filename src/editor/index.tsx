@@ -1,34 +1,37 @@
 import { Allotment } from 'allotment';
-import Header from '../components/Header';
-import EditArea from '../components/EditArea';
-import Setting from '../components/Setting';
-import MeterialWrapper from '../components/MaterialWrapper';
-import { useComponetsStore } from './stores/components';
-import { Preview } from './components/Preview';
+import Header from './components/Header';
+import Material from './components/Material';
+import EditArea from './components/EditArea';
+import Setting from './components/Setting';
 import 'allotment/dist/style.css';
 
 export default function LowcodeEditor() {
-  const { mode } = useComponetsStore();
   return (
     <div className="h-[100vh] flex flex-col">
-      <div className="h-[60px] flex items-center border-b-[1px] border-[#000]">
+      <div className="h-12 mb-4 bg-slate-100">
         <Header />
       </div>
-      {mode === 'edit' ? (
-        <Allotment>
-          <Allotment.Pane preferredSize={240} maxSize={300} minSize={200}>
-            <MeterialWrapper />
-          </Allotment.Pane>
-          <Allotment.Pane>
-            <EditArea />
-          </Allotment.Pane>
-          <Allotment.Pane preferredSize={300} maxSize={500} minSize={300}>
-            <Setting />
-          </Allotment.Pane>
-        </Allotment>
-      ) : (
-        <Preview />
-      )}
+      <Allotment className="bg-slate-100">
+        <Allotment.Pane
+          className="p-3 pt-1"
+          preferredSize={240}
+          maxSize={300}
+          minSize={200}
+        >
+          <Material />
+        </Allotment.Pane>
+        <Allotment.Pane className="bg-white border-t">
+          <EditArea />
+        </Allotment.Pane>
+        <Allotment.Pane
+          className="p-3 pt-1"
+          preferredSize={300}
+          maxSize={400}
+          minSize={300}
+        >
+          <Setting />
+        </Allotment.Pane>
+      </Allotment>
     </div>
   );
 }

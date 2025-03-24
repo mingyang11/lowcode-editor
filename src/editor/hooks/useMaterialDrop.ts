@@ -1,35 +1,43 @@
-import { useDrop } from 'react-dnd';
-import { useComponetsStore } from '../stores/components';
-import { useComponentConfigStore } from '../stores/component-config';
+import { useComponentConfigStore } from '../stores/componentConfig';
+import { useComponentsStore } from '../stores/components';
+import { message } from 'antd';
+import { useDrop, ConnectDropTarget } from 'react-dnd';
 
-export function useMaterailDrop(accept: string[], id: number) {
-  const { addComponent } = useComponetsStore();
+export const useMeterialDrop = (
+  accept: string[],
+  id: number
+): [boolean, ConnectDropTarget] => {
+  const { addComponent } = useComponentsStore();
   const { componentConfig } = useComponentConfigStore();
 
-  const [{ canDrop }, drop] = useDrop(() => ({
-    accept,
-    drop: (item: { type: string }, monitor) => {
-      const didDrop = monitor.didDrop();
-      if (didDrop) {
-        return;
-      }
+  const [{ canDrop }, drop] = useDrop(() => {
+    return {
+      accept: accept,
+      drop: (item: { type: string }, monitor) => {
+        const didDrop = monitor.didDrop();
+        if (didDrop) {
+          return;
+        }
 
-      const config = componentConfig[item.type];
-      addComponent(
-        {
-          id: new Date().getTime(),
-          name: item.type,
-          desc: config.desc,
-          props: config.defaultProps,
-          styles: {},
-        },
-        id
-      );
-    },
-    collect: (monitor) => ({
-      canDrop: monitor.canDrop(),
-    }),
-  }));
+        message.success(item.type);
 
-  return { canDrop, drop };
-}
+        const { defaultProps } = componentConfig[item.type];
+        addComponent(
+          {
+            id: Number(new Date().getTime()),
+            name: item.type,
+            props: defaultProps,
+          },
+          id
+        );
+      },
+      collect: (monitor) => {
+        return {
+          canDrop: monitor.canDrop(),
+        };
+      },
+    };
+  });
+
+  return [canDrop, drop];
+};

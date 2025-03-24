@@ -1,11 +1,7 @@
 import LowcodeEditor from './editor';
 
 function App() {
-  return (
-    <div>
-      <LowcodeEditor />
-    </div>
-  );
+  return <LowcodeEditor />;
 }
 
 export default App;
