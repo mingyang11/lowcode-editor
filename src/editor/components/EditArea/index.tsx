@@ -25,6 +25,7 @@ export default function Index() {
           key: component.id,
           name: component.name,
           id: component.id,
+          styles: component.styles || {},
           ...config.defaultProps,
           ...component.props,
         },

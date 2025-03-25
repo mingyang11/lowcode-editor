@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { create } from 'zustand';
 
 export interface IComponent {
@@ -5,6 +6,7 @@ export interface IComponent {
   name: string;
   props: any;
   desc: string;
+  styles?: CSSProperties;
   children?: IComponent[];
   parentId?: number;
 }
@@ -18,8 +20,12 @@ interface IState {
 interface IAction {
   addComponent: (component: IComponent, parentId?: number) => void;
   deleteComponent: (componentId: number | null) => void;
-  updateComponentProps: (componentId: number, props: any) => void;
+  updateComponentProps: (componentId: number | null, props: any) => void;
   setCurComponentId: (componentId: number | null) => void;
+  updateComponentStyles: (
+    componentId: number | null,
+    styles: CSSProperties
+  ) => void;
 }
 
 export const useComponentsStore = create<IState & IAction>((set, get) => {
@@ -55,7 +61,6 @@ export const useComponentsStore = create<IState & IAction>((set, get) => {
           component.parentId = parentId;
           return { components: [...state.components] };
         }
-        console.log(121);
 
         return { components: [...state.components, component] };
       }),
@@ -89,11 +94,11 @@ export const useComponentsStore = create<IState & IAction>((set, get) => {
      * @param props
      * @returns
      */
-    updateComponentProps: (componentId: number, props: any) =>
+    updateComponentProps: (componentId: number | null, props: any) =>
       set((state) => {
         const component = getComponentById(componentId, state.components);
         if (component) {
-          component.props = [...component.props, ...props];
+          component.props = { ...component.props, ...props };
         }
         return { components: [...state.components] };
       }),
@@ -103,6 +108,15 @@ export const useComponentsStore = create<IState & IAction>((set, get) => {
         curComponentId: curComponentId,
         curComponent: getComponentById(curComponentId, state.components),
       })),
+
+    updateComponentStyles: (componentId, styles: any) =>
+      set((state) => {
+        const component = getComponentById(componentId, state.components);
+        if (component) {
+          component.styles = { ...component.styles, ...styles };
+        }
+        return { components: [...state.components] };
+      }),
   };
 });
 

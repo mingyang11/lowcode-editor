@@ -1,17 +1,11 @@
-import { PropsWithChildren } from 'react';
 import { Button } from 'antd';
+import { CommonComponentProps } from '../../interface';
 
-export interface IButton {
-  type: 'link' | 'text' | 'default' | 'primary' | 'dashed' | undefined;
-  text: string;
-  id: number;
-}
-
-export default function Index(props: PropsWithChildren<IButton>) {
-  const { text, type, id } = props;
+export default function Index(props: CommonComponentProps) {
+  const { text, type, id, styles } = props;
 
   return (
-    <Button data-component-id={id} type={type}>
+    <Button data-component-id={id} type={type} style={styles}>
       {text || '按钮'}
     </Button>
   );

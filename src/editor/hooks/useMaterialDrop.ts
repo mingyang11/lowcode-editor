@@ -28,6 +28,7 @@ export const useMeterialDrop = (
             name: item.type,
             desc: desc,
             props: defaultProps,
+            styles: {},
           },
           id
         );

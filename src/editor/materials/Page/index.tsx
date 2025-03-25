@@ -1,10 +1,7 @@
 import { useMeterialDrop } from '../../hooks/useMaterialDrop';
-import { PropsWithChildren } from 'react';
+import { CommonComponentProps } from '../../interface';
 
-interface IPageProps {
-  id: number;
-}
-function Page({ children, id }: PropsWithChildren<IPageProps>) {
+function Page({ children, id, styles }: CommonComponentProps) {
   const [canDrop, drop] = useMeterialDrop(['Container', 'Button'], id);
 
   return (
@@ -12,7 +9,7 @@ function Page({ children, id }: PropsWithChildren<IPageProps>) {
       ref={drop}
       data-component-id={id}
       className="p-[16px] h-[100%] box-border"
-      style={{ border: canDrop ? '1px solid blue' : '' }}
+      style={{ ...styles, border: canDrop ? '1px solid blue' : '' }}
     >
       {children}
     </div>
