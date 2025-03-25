@@ -1,6 +1,6 @@
 import { Allotment } from 'allotment';
 import Header from './components/Header';
-import Material from './components/Material';
+import MaterialWrapper from './components/MaterialWrapper';
 import EditArea from './components/EditArea';
 import Setting from './components/Setting';
 import 'allotment/dist/style.css';
@@ -18,7 +18,7 @@ export default function LowcodeEditor() {
           maxSize={300}
           minSize={200}
         >
-          <Material />
+          <MaterialWrapper />
         </Allotment.Pane>
         <Allotment.Pane className="bg-white border-t">
           <EditArea />

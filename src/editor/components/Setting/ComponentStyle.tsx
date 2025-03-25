@@ -5,6 +5,7 @@ import {
   IComponentSetter,
   useComponentConfigStore,
 } from '../../stores/componentConfig';
+import CssEditor from './CSSEditor';
 import { CSSProperties, useEffect } from 'react';
 
 export function ComponentStyle() {
@@ -30,6 +31,11 @@ export function ComponentStyle() {
     }
   }
 
+  /**
+   * css编辑器变化
+   */
+  function handleEditorChange() {}
+
   useEffect(() => {
     form.setFieldsValue({
       ...curComponent?.styles,
@@ -53,6 +59,9 @@ export function ComponentStyle() {
           );
         }
       )}
+      <div className="h-[200px] border-[1px] border-[#ccc]">
+        <CssEditor value={`.comp{\n\n}`} onChange={handleEditorChange} />
+      </div>
     </Form>
   );
 }
