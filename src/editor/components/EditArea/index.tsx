@@ -15,12 +15,12 @@ export default function Index() {
       const config = componentConfig?.[component.name];
 
       // 容错处理
-      if (!config?.component) {
+      if (!config?.dev) {
         return null;
       }
 
       return React.createElement(
-        config.component,
+        config.dev,
         {
           key: component.id,
           name: component.name,

@@ -15,6 +15,7 @@ interface IState {
   components: IComponent[];
   curComponentId?: number | null;
   curComponent: IComponent | null;
+  mode: 'edit' | 'preview';
 }
 
 interface IAction {
@@ -26,6 +27,7 @@ interface IAction {
     componentId: number | null,
     styles: CSSProperties
   ) => void;
+  updateMode: (mode: 'edit' | 'preview') => void;
 }
 
 export const useComponentsStore = create<IState & IAction>((set, get) => {
@@ -39,6 +41,7 @@ export const useComponentsStore = create<IState & IAction>((set, get) => {
       },
     ],
     curComponentId: null,
+    mode: 'edit',
     curComponent: null,
     /**
      * 新增
@@ -117,6 +120,8 @@ export const useComponentsStore = create<IState & IAction>((set, get) => {
         }
         return { components: [...state.components] };
       }),
+
+    updateMode: (mode: 'edit' | 'preview') => set({ mode }),
   };
 });
 

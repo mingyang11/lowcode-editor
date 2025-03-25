@@ -1,7 +1,10 @@
 import { create } from 'zustand';
-import Button from '../materials/Button';
-import Container from '../materials/Container';
-import Page from '../materials/Page';
+import ButtonDev from '../materials/Button/dev';
+import ContainerDev from '../materials/Container/dev';
+import PageDev from '../materials/Page/dev';
+import ButtonProd from '../materials/Button/prod';
+import ContainerProd from '../materials/Container/prod';
+import PageProd from '../materials/Page/prod';
 
 export interface IComponentSetter {
   name: string;
@@ -15,7 +18,8 @@ export interface IComponentConfig {
   desc: string;
   setter?: IComponentSetter[];
   stylesSetter?: IComponentSetter[];
-  component: any;
+  dev: any;
+  prod: any;
 }
 
 interface IState {
@@ -33,13 +37,15 @@ export const useComponentConfigStore = create<IState & IAction>((set) => {
         name: 'Page',
         defaultProps: {},
         desc: '页面',
-        component: Page,
+        dev: PageDev,
+        prod: PageProd,
       },
       Container: {
         name: 'Container',
         defaultProps: {},
         desc: '容器',
-        component: Container,
+        dev: ContainerDev,
+        prod: ContainerProd,
       },
       Button: {
         name: 'Button',
@@ -73,7 +79,8 @@ export const useComponentConfigStore = create<IState & IAction>((set) => {
           },
         ],
         desc: '按钮',
-        component: Button,
+        dev: ButtonDev,
+        prod: ButtonProd,
       },
     },
     registerComponent: (name, config) =>
