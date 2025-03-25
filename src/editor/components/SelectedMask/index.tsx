@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Dropdown, Popconfirm, Space } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
+import { ItemType } from 'antd/es/menu/interface';
 import { useComponentsStore, getComponentById } from '../../stores/components';
 
 interface IHoverMaskProps {
@@ -132,7 +133,7 @@ export default function SelectedMask(props: IHoverMaskProps) {
               items: parentComponents.map((com) => ({
                 key: com?.id,
                 label: com?.desc,
-              })),
+              })) as ItemType[],
               onClick: ({ key }) => {
                 setCurComponentId(+key);
               },
