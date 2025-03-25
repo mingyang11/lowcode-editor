@@ -10,7 +10,8 @@ function Page({ children, id }: PropsWithChildren<IPageProps>) {
   return (
     <div
       ref={drop}
-      className="p-[4px] h-[100%] box-border"
+      data-component-id={id}
+      className="p-[16px] h-[100%] box-border"
       style={{ border: canDrop ? '1px solid blue' : '' }}
     >
       {children}

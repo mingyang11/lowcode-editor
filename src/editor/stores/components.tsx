@@ -4,18 +4,22 @@ export interface IComponent {
   id: number;
   name: string;
   props: any;
+  desc: string;
   children?: IComponent[];
   parentId?: number;
 }
 
 interface IState {
   components: IComponent[];
+  curComponentId?: number | null;
+  curComponent: IComponent | null;
 }
 
 interface IAction {
   addComponent: (component: IComponent, parentId?: number) => void;
-  deleteComponent: (componentId: number) => void;
+  deleteComponent: (componentId: number | null) => void;
   updateComponentProps: (componentId: number, props: any) => void;
+  setCurComponentId: (componentId: number | null) => void;
 }
 
 export const useComponentsStore = create<IState & IAction>((set, get) => {
@@ -28,6 +32,8 @@ export const useComponentsStore = create<IState & IAction>((set, get) => {
         desc: '页面',
       },
     ],
+    curComponentId: null,
+    curComponent: null,
     /**
      * 新增
      * @param component
@@ -59,7 +65,7 @@ export const useComponentsStore = create<IState & IAction>((set, get) => {
      * @param componentId
      * @returns
      */
-    deleteComponent: (componentId: number) => {
+    deleteComponent: (componentId: number | null) => {
       if (!componentId) return;
       const component = getComponentById(componentId, get().components);
       if (component?.parentId) {
@@ -91,6 +97,12 @@ export const useComponentsStore = create<IState & IAction>((set, get) => {
         }
         return { components: [...state.components] };
       }),
+
+    setCurComponentId: (curComponentId) =>
+      set((state) => ({
+        curComponentId: curComponentId,
+        curComponent: getComponentById(curComponentId, state.components),
+      })),
   };
 });
 
@@ -100,8 +112,8 @@ export const useComponentsStore = create<IState & IAction>((set, get) => {
  * @param components 组件树
  * @returns parentComponent
  */
-const getComponentById = (
-  id: number,
+export const getComponentById = (
+  id: number | null,
   components: IComponent[]
 ): IComponent | null => {
   if (!id) return null;

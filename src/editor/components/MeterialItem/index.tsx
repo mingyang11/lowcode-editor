@@ -2,10 +2,11 @@ import { useDrag } from 'react-dnd';
 
 interface IMeterialItemProps {
   name: string;
+  desc: string;
 }
 
 export default function MeterialItem(props: IMeterialItemProps) {
-  const { name } = props;
+  const { name, desc } = props;
   const [, drag] = useDrag({
     type: name,
     item: {
@@ -26,7 +27,7 @@ export default function MeterialItem(props: IMeterialItemProps) {
             bg-white
             hover:bg-[#ccc]"
     >
-      {name}
+      {desc}
     </div>
   );
 }

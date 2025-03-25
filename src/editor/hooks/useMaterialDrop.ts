@@ -21,11 +21,12 @@ export const useMeterialDrop = (
 
         message.success(item.type);
 
-        const { defaultProps } = componentConfig[item.type];
+        const { defaultProps, desc } = componentConfig[item.type];
         addComponent(
           {
             id: Number(new Date().getTime()),
             name: item.type,
+            desc: desc,
             props: defaultProps,
           },
           id
