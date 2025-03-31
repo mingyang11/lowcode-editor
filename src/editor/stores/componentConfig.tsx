@@ -12,12 +12,18 @@ export interface IComponentSetter {
   type: string;
   [key: string]: any;
 }
+
+export interface IComponentEvents {
+  name: string;
+  label: string;
+}
 export interface IComponentConfig {
   name: string;
   defaultProps: Record<string, any>;
   desc: string;
   setter?: IComponentSetter[];
   stylesSetter?: IComponentSetter[];
+  events?: IComponentEvents[];
   dev: any;
   prod: any;
 }
@@ -76,6 +82,16 @@ export const useComponentConfigStore = create<IState & IAction>((set) => {
             name: 'height',
             label: '高度',
             type: 'inputNumber',
+          },
+        ],
+        events: [
+          {
+            name: 'onClick',
+            label: '点击事件',
+          },
+          {
+            name: 'onDoubleClick',
+            label: '双击事件',
           },
         ],
         desc: '按钮',
