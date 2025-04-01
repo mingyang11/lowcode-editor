@@ -1,5 +1,4 @@
 import { Input, Select } from 'antd';
-import { IComponentEvents } from '../../../stores/componentConfig';
 import { useComponentsStore } from '../../../stores/components';
 import { useState } from 'react';
 

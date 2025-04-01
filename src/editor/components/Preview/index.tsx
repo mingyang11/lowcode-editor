@@ -1,6 +1,5 @@
 import React from 'react';
 import { message } from 'antd';
-import { ActionConfig } from '../Setting/actions/ActionModal';
 import { IComponent, useComponentsStore } from '../../stores/components';
 import { useComponentConfigStore } from '../../stores/componentConfig';
 
