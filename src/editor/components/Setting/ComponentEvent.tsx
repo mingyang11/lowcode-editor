@@ -4,9 +4,7 @@ import {
   IComponentEvents,
   useComponentConfigStore,
 } from '../../stores/componentConfig';
-import { ActionModal } from './actions/ActionModal';
-import { IGoToLinkConfig } from './actions/GoToLink';
-import { IShowMessageConfig } from './actions/ShowMessage';
+import { ActionModal, ActionConfig } from './actions/ActionModal';
 import { useState } from 'react';
 
 export function ComponentEvent() {
@@ -14,6 +12,8 @@ export function ComponentEvent() {
   const { componentConfig } = useComponentConfigStore();
   const [actionModalOpen, setActionModalOpen] = useState<boolean>(false);
   const [curEvent, setCurEvent] = useState<IComponentEvents>();
+  const [curConfig, setCurConfig] = useState<ActionConfig>();
+  const [curConfigIndex, setCurConfigIndex] = useState<number>();
 
   if (!curComponent) return null;
 
@@ -27,6 +27,13 @@ export function ComponentEvent() {
         actions: actions,
       },
     });
+  }
+
+  function editAction(item: ActionConfig, index: number) {
+    if (!curComponent) return null;
+    setCurConfig(item);
+    setActionModalOpen(true);
+    setCurConfigIndex(index);
   }
 
   const items: CollapseProps['items'] = (
@@ -51,14 +58,27 @@ export function ComponentEvent() {
       children: (
         <div>
           {(curComponent.props[event.name]?.actions || []).map(
-            (item: IShowMessageConfig | IGoToLinkConfig, index: number) => {
+            (item: ActionConfig, index: number) => {
               return (
                 <div>
                   {item.type === 'goToLink' ? (
                     <div className="border border-[#aaa] m-[10px] p-[10px] flex-1">
                       <div className="text-[blue] flex justify-between">
                         <span className="flex-1">跳转链接</span>
-                        <a onClick={() => deleteAction(event, index)}>删除</a>
+                        <div className="flex gap-2">
+                          <a
+                            className="cursor-pointer"
+                            onClick={() => editAction(item, index)}
+                          >
+                            编辑
+                          </a>
+                          <a
+                            className="cursor-pointer"
+                            onClick={() => deleteAction(event, index)}
+                          >
+                            删除
+                          </a>
+                        </div>
                       </div>
                       <div>{item.url}</div>
                     </div>
@@ -67,10 +87,46 @@ export function ComponentEvent() {
                     <div className="border border-[#aaa] m-[10px] p-[10px]">
                       <div className="text-[blue] flex justify-between">
                         <span className="flex-1">消息弹窗</span>
-                        <a onClick={() => deleteAction(event, index)}>删除</a>
+                        <div className="flex gap-2">
+                          <a
+                            className="cursor-pointer"
+                            onClick={() => editAction(item, index)}
+                          >
+                            编辑
+                          </a>
+                          <a
+                            className="cursor-pointer"
+                            onClick={() => deleteAction(event, index)}
+                          >
+                            删除
+                          </a>
+                        </div>
                       </div>
                       <div>{item.config.type}</div>
                       <div>{item.config.text}</div>
+                    </div>
+                  ) : null}
+                  {item.type === 'customJS' ? (
+                    <div className="border border-[#aaa] m-[10px] p-[10px]">
+                      <div className="text-[blue] flex justify-between">
+                        <span className="flex-1">自定义JS</span>
+                        <div className="flex gap-2">
+                          <a
+                            className="cursor-pointer"
+                            onClick={() => editAction(item, index)}
+                          >
+                            编辑
+                          </a>
+                          <a
+                            className="cursor-pointer"
+                            onClick={() => deleteAction(event, index)}
+                          >
+                            删除
+                          </a>
+                        </div>
+                      </div>
+                      <div>{item.type}</div>
+                      <div>{item.code}</div>
                     </div>
                   ) : null}
                 </div>
@@ -82,18 +138,31 @@ export function ComponentEvent() {
     };
   });
 
-  const handleModalOk = (config: IShowMessageConfig | IGoToLinkConfig) => {
+  const handleModalOk = (config?: ActionConfig) => {
     if (!config || !curEvent || !curComponent) return null;
 
-    updateComponentProps(curComponent.id, {
-      [curEvent.name]: {
-        actions: [
-          ...(curComponent.props[curEvent.name]?.actions || []),
-          config,
-        ],
-      },
-    });
+    if (curConfig) {
+      updateComponentProps(curComponent.id, {
+        [curEvent.name]: {
+          actions: curComponent.props[curEvent.name]?.actions.map(
+            (item: ActionConfig, index: number) => {
+              return index === curConfigIndex ? config : item;
+            }
+          ),
+        },
+      });
+    } else {
+      updateComponentProps(curComponent.id, {
+        [curEvent.name]: {
+          actions: [
+            ...(curComponent.props[curEvent.name]?.actions || []),
+            config,
+          ],
+        },
+      });
+    }
 
+    setCurConfig(undefined);
     setActionModalOpen(false);
   };
 
@@ -108,8 +177,8 @@ export function ComponentEvent() {
       />
       <ActionModal
         visible={actionModalOpen}
-        eventConfig={curEvent!}
-        handleOk={(config: IShowMessageConfig | IGoToLinkConfig) => {
+        action={curConfig}
+        handleOk={(config: ActionConfig) => {
           handleModalOk(config);
         }}
         handleCancel={() => {

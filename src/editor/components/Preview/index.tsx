@@ -1,5 +1,6 @@
 import React from 'react';
 import { message } from 'antd';
+import { ActionConfig } from '../Setting/actions/ActionModal';
 import { IComponent, useComponentsStore } from '../../stores/components';
 import { useComponentConfigStore } from '../../stores/componentConfig';
 
@@ -24,6 +25,15 @@ export default function Preview() {
               } else if (element.config.type === 'error') {
                 message.error(element.config.text);
               }
+            } else if (type === 'customJS') {
+              const func = new Function('context', element.code);
+              func({
+                name: component.name,
+                props: component.props,
+                showMessage(content: string) {
+                  message.success(content);
+                },
+              });
             }
           });
         };
