@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { message } from 'antd';
 import { IComponent, useComponentsStore } from '../../stores/components';
 import { useComponentConfigStore } from '../../stores/componentConfig';
 
 export default function Preview() {
+  const componentRefs = useRef<Record<string, any>>({});
+
   const { componentConfig } = useComponentConfigStore();
   const { components } = useComponentsStore();
 
@@ -15,7 +17,7 @@ export default function Preview() {
       if (eventConfig) {
         props[event.name] = () => {
           eventConfig?.actions?.forEach((element: any) => {
-            const { type } = element;
+            const { type, config } = element;
             if (type === 'goToLink' && element.url) {
               window.location.href = element.url;
             } else if (type === 'showMessage' && element.config) {
@@ -33,6 +35,12 @@ export default function Preview() {
                   message.success(content);
                 },
               });
+            } else if (type === 'componentMethod') {
+              const component = componentRefs.current[config?.componentId];
+
+              if (component) {
+                component[config?.method]?.();
+              }
             }
           });
         };
@@ -52,6 +60,9 @@ export default function Preview() {
           id: component.id,
           name: component.name,
           styles: component.styles,
+          ref: (ref: Record<string, any>) => {
+            componentRefs.current[component.id] = ref;
+          },
           ...config.defaultProps,
           ...component.props,
           ...handleEvent(component),

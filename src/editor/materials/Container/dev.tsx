@@ -2,7 +2,7 @@ import { useMeterialDrop } from '../../hooks/useMaterialDrop';
 import { CommonComponentProps } from '../../interface';
 
 export default function Index({ children, id, styles }: CommonComponentProps) {
-  const [canDrop, drop] = useMeterialDrop(['Container', 'Button'], id);
+  const [canDrop, drop] = useMeterialDrop(['Container', 'Button', 'Modal'], id);
 
   return (
     <div

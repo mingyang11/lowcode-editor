@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 import { GoToLink, IGoToLinkConfig } from './GoToLink';
 import { ShowMessage, IShowMessageConfig } from './ShowMessage';
 import { ICustomJSConfig, CustomJS } from './CustomJS';
+import { ComponentMethod, IComponentMethodConfig } from './ComponentMethod';
 
 export type ActionConfig =
   | ICustomJSConfig
   | IShowMessageConfig
-  | IGoToLinkConfig;
+  | IGoToLinkConfig
+  | IComponentMethodConfig;
 
 interface ActionModalProps {
   visible: boolean;
@@ -20,6 +22,7 @@ const map = {
   goToLink: '访问链接',
   showMessage: '消息提示',
   customJS: '自定义 JS',
+  componentMethod: '组件方法',
 };
 
 export function ActionModal(props: ActionModalProps) {
@@ -49,7 +52,7 @@ export function ActionModal(props: ActionModalProps) {
           value={key}
           onChange={setKey}
           block
-          options={['访问链接', '消息提示', '自定义 JS']}
+          options={['访问链接', '消息提示', '组件方法', '自定义 JS']}
         />
         {key === '访问链接' && (
           <GoToLink
@@ -67,6 +70,17 @@ export function ActionModal(props: ActionModalProps) {
               setCurConig(config);
             }}
             value={action?.type === 'showMessage' ? action.config : undefined}
+          />
+        )}
+        {key === '组件方法' && (
+          <ComponentMethod
+            key={'组件方法'}
+            value={
+              action?.type === 'componentMethod' ? action.config : undefined
+            }
+            onChange={(config) => {
+              setCurConig(config);
+            }}
           />
         )}
         {key === '自定义 JS' && (
